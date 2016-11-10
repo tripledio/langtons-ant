@@ -1,0 +1,37 @@
+group 'rotateit'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1-M02'
+    ext.junitPlatformVersion = '1.0.0-M2'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}"
+
+    }
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile 'io.damo.aspen:aspen:2.0.0'
+    testCompile 'com.natpryce:hamkrest:1.2.2.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.0.0-M2'
+}
