@@ -33,7 +33,7 @@ class LangtonsAntTest : Test({
                     ██████████""")))
         }
 
-        test("Turns right when on a black tile, moves forward, leaves it white"){
+        test("Turns right when on a black tile, moves forward, leaves it green"){
             var grid = createGrid("""
                     ██████████
                     ██████████
@@ -54,7 +54,7 @@ class LangtonsAntTest : Test({
                     ██████████
                     ██████████
                     █████↑████
-                    █████□████
+                    █████x████
                     ██████████
                     ██████████
                     ██████████
@@ -87,6 +87,34 @@ class LangtonsAntTest : Test({
                     ██████████
                     ██████████""")))
         }
+
+
+        test("Turns around when on a green tile, moves forward, leaves it white"){
+            var grid = createGrid("""
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    █████←████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████""", GREEN)
+
+            grid.tick()
+
+            assertThat(represent(grid), equalTo(represent("""██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    █████□→███
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████""")))
+        }
     }
 })
 
@@ -94,6 +122,7 @@ fun represent(input: String): String
     = withNewLines(input.filter { c -> !c.isWhitespace() }.map { c-> c.toString() }.joinToString(""), 10)
 
 fun represent(grid: Grid): String = withNewLines(grid.squares.map { s -> when (s.content){
+    GREEN -> 'x'
     BLACK -> '█'
     WHITE -> '□'
     ANT -> when (s.direction){
@@ -120,6 +149,7 @@ fun createGrid(state: String, antSquare: SquareContent = BLACK): Grid =
                     '↓' -> Square(ANT, SOUTH, antSquare)
                     '█' -> Square(BLACK)
                     '□' -> Square(WHITE)
+                    'x' -> Square(GREEN)
                     else -> TODO()
                  }
             }))
@@ -157,7 +187,10 @@ enum class SquareContent {
         override fun flippedColor(): SquareContent = BLACK
     },
     BLACK {
-        override fun flippedColor(): SquareContent  = WHITE
+        override fun flippedColor(): SquareContent  = GREEN
+    },
+    GREEN {
+        override fun flippedColor(): SquareContent = WHITE
     },
     ANT {
         override fun flippedColor(): SquareContent = ANT
@@ -171,6 +204,7 @@ enum class Direction(val moves: Int) {
         override fun determineNewDirection(content: SquareContent): Direction =
             when (content) {
                 BLACK -> WEST
+                GREEN -> SOUTH
                 else -> EAST
             }
     },
@@ -178,6 +212,7 @@ enum class Direction(val moves: Int) {
         override fun determineNewDirection(content: SquareContent): Direction =
             when (content){
                 BLACK -> SOUTH
+                GREEN -> WEST
                 else -> NORTH
             }
     },
@@ -185,6 +220,7 @@ enum class Direction(val moves: Int) {
         override fun determineNewDirection(content: SquareContent): Direction =
             when (content){
                 BLACK -> EAST
+                GREEN -> NORTH
                 else -> WEST
             }
     },
@@ -192,6 +228,7 @@ enum class Direction(val moves: Int) {
         override fun determineNewDirection(content: SquareContent): Direction =
             when (content){
                 BLACK -> NORTH
+                GREEN -> EAST
                 else -> SOUTH
             }
     },

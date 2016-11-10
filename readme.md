@@ -1,5 +1,39 @@
 # Langton's ant
 
+This branch shows a new requirement introduced by Michel Grootjans (https://github.com/michelgrootjans):
+   * There is a new green tile, white flips to black, black flips to green, green flips to white
+   * The ant turns 180 degrees around
+   
+Visually represented this looks like:
+```kotlin
+        test("Turns around when on a green tile, moves forward, leaves it white"){
+            var grid = createGrid("""
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    █████←████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████""", GREEN)
+
+            grid.tick()
+
+            assertThat(represent(grid), equalTo(represent("""██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████
+                    █████□→███
+                    ██████████
+                    ██████████
+                    ██████████
+                    ██████████""")))
+        }
+```
+
 During a socrates antwerp meeting we tdd'd langtons ant (https://en.wikipedia.org/wiki/Langton%27s_ant), code can be found here:
 https://github.com/michelgrootjans/langtons-ant
 
